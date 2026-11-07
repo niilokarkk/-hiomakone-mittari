@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="fi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b1626">
+<title>Hiomakone · V4.1 · Sovellus 1.2</title>
+<style>
+:root { color-scheme: dark; --bg:#08111f; --card:#122138; --card2:#172a43; --line:#304158; --ink:#eff5ff; --muted:#a8b8ce; --accent:#5ee0c4; --red:#ff8585; --amber:#ffcf80; }
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.45}main{max-width:760px;margin:auto;padding:18px 14px 65px}.eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);font-weight:700}h1{font-size:29px;line-height:1.12;margin:7px 0 5px}h2{font-size:17px;margin:0 0 12px}p{margin:0 0 12px}.muted,small{color:var(--muted)}.top{margin-bottom:18px}.card{background:var(--card);border:1px solid #263850;border-radius:16px;padding:16px;margin:12px 0}.connect{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:space-between}.status{display:flex;align-items:center;gap:8px;font-weight:650}.dot{height:11px;width:11px;border-radius:100%;background:#8694a8;flex:none}.dot.ok{background:var(--accent)}.dot.warn{background:var(--amber)}.dot.bad{background:var(--red)}button{font:inherit;cursor:pointer;border:0;border-radius:10px;padding:11px 14px;background:var(--accent);color:#07251f;font-weight:750;min-height:44px}button.secondary{background:#29415a;color:var(--ink)}button:disabled{opacity:.45;cursor:not-allowed}.actions{display:flex;gap:9px;flex-wrap:wrap} .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.metric{background:var(--card2);padding:14px;border-radius:12px;min-width:0}.metric.primary{grid-column:span 2;background:#113b42}.value{font-size:30px;font-weight:780;font-variant-numeric:tabular-nums;letter-spacing:-.03em;word-break:break-word}.metric.primary .value{font-size:43px}.label{color:var(--muted);font-size:13px}.unit{font-size:14px;color:var(--muted);font-weight:500}.health{padding:10px 12px;border-radius:10px;background:#1d3047;margin-top:12px;color:var(--muted);font-size:14px}.health.good{color:var(--accent)}.health.bad{color:var(--red)}.health.warn{color:var(--amber)}canvas{display:block;width:100%;height:220px}.subrow{display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap}input{font:inherit;background:#0b1a2d;color:var(--ink);border:1px solid #50617a;border-radius:10px;padding:10px;min-width:0;flex:1}label{font-size:13px;color:var(--muted)}.entry{display:flex;align-items:start;gap:10px;justify-content:space-between;border-top:1px solid var(--line);padding:10px 0;font-size:13px}.entry strong{font-size:15px}.entry button{font-size:12px;padding:7px 9px;min-height:32px}details{margin-top:10px}summary{cursor:pointer;color:var(--muted)}code{word-break:break-all}#message{min-height:22px;color:var(--muted);font-size:13px;margin-top:10px}.hint{font-size:13px;color:var(--muted)}.hidden{display:none!important}a{color:var(--accent)}select{font:inherit;background:#0b1a2d;color:var(--ink);border:1px solid #50617a;border-radius:10px;padding:10px;min-width:0;max-width:100%}.statgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.statbox{background:var(--card2);border-radius:10px;padding:10px}.statbox strong{font-size:19px;font-variant-numeric:tabular-nums}.controlrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.logline{padding:9px 0;border-bottom:1px solid var(--line);font-size:13px}.tiny{font-size:12px}.tag{display:inline-block;border-radius:7px;padding:2px 6px;background:#234559;color:var(--accent);font-size:12px}.warn-text{color:var(--amber)}
+</style>
+</head>
+<body><main>
+<header class="top"><div class="eyebrow">Arduino Nano 33 BLE Sense Rev2</div><h1>Hiomakoneen värinämittari</h1><p class="muted">V4.1 · BMI270 FIFO · BLE · 40–60 Hz · sovellus 1.2</p></header>
+<section class="card">
+ <div class="connect"><div><div class="status"><span id="dot" class="dot"></span><span id="connection">Ei yhteyttä</span></div><small id="deviceName">Ei valittua laitetta</small></div><div class="actions"><button id="connect">Yhdistä BLE</button><button class="secondary" id="disconnect" disabled>Katkaise</button></div></div>
+ <div id="message" aria-live="polite">Avaa sivu Androidin Chromessa HTTPS-osoitteesta. Sulje nRF Connectin yhteys ennen yhdistämistä.</div>
+</section>
+<section class="grid" aria-label="Mittausarvot">
+ <div class="metric primary"><div class="label">Pyörimistaajuinen 1×-värinä</div><div class="value"><span id="rms">—</span> <span class="unit">g RMS</span></div></div>
+ <div class="metric"><div class="label">Värähtelynopeus</div><div class="value"><span id="velocity">—</span></div><div class="unit">mm/s RMS · 1×</div></div>
+ <div class="metric"><div class="label">Huipputaajuus</div><div class="value"><span id="frequency">—</span></div><div class="unit">Hz</div></div>
+ <div class="metric"><div class="label">Arvioitu kierrosnopeus</div><div class="value"><span id="rpm">—</span></div><div class="unit">rpm (ei suora mittaus)</div></div>
+ <div class="metric"><div class="label">Kokonais-RMS</div><div class="value"><span id="total">—</span></div><div class="unit">g</div></div>
+</section>
+<section class="card"><div class="subrow"><h2 style="margin:0">Mittauksen tila</h2><small id="updated">Ei mittauksia</small></div><div class="health" id="health">Odotetaan mittausta</div><div class="grid" style="margin-top:12px"><div><div class="label">FIFO-näytteitä</div><strong id="count">—</strong></div><div><div class="label">FIFO-ohituksia</div><strong id="skips">—</strong></div><div><div class="label">Keruunopeus</div><strong id="rate">—</strong> <small>näytettä/s</small></div><div><div class="label">Tilakoodi</div><strong id="statusCode">—</strong></div></div></section>
+<section class="card"><div class="subrow"><h2 style="margin:0">Värinän kehitys</h2><small>Viimeiset 60 hyväksyttyä mittausta</small></div><canvas id="chart" role="img" aria-label="1x RMS:n trendikäyrä"></canvas><p class="hint">Hyväksytyt mittaukset piirretään käyrään, myös tilakoodi 2 (heikko 1×-signaali). Mittausloki tallentuu erikseen selaimen muistiin.</p><div class="actions"><button id="save" disabled>Tallenna nykyinen mittaus</button><button id="csv" class="secondary">Vie CSV</button><button id="clearTrend" class="secondary">Tyhjennä käyrä</button></div></section>
+<section class="card" id="loggingSection">
+ <div class="subrow"><h2 style="margin:0">Automaattinen mittausloki</h2><span class="tag" id="logState">Valmis</span></div>
+ <p class="hint">Jokainen laaduntarkistuksen läpäisevä mittaus tallennetaan automaattisesti valittuun sarjaan. Loki säilyy selaimen uudelleenkäynnistyksen jälkeen samalla laitteella ja selaimella.</p>
+ <div class="controlrow" style="margin-bottom:10px"><label for="sessionName">Uuden mittaussarjan nimi</label><input id="sessionName" maxlength="90" placeholder="Esim. Purkinkansi – säätö 1"></div>
+ <div class="actions" style="margin-bottom:12px"><button id="newSession">Aloita uusi sarja</button><button id="pauseLog" class="secondary">Keskeytä tallennus</button></div>
+ <div class="controlrow" style="margin-bottom:12px"><label for="sessionSelect">Tarkasteltava sarja</label><select id="sessionSelect"></select></div>
+ <div class="statgrid" aria-label="Mittauksen tunnusluvut">
+  <div class="statbox"><div class="label">Hyväksyttyjä mittauksia</div><strong id="statCount">0</strong></div>
+  <div class="statbox"><div class="label">1× RMS keskiarvo</div><strong id="statMean">—</strong> <small>g</small></div>
+  <div class="statbox"><div class="label">1× RMS hajonta</div><strong id="statStd">—</strong> <small>g</small></div>
+  <div class="statbox"><div class="label">Pienin / suurin 1× RMS</div><strong id="statMinMax">—</strong> <small>g</small></div>
+ </div>
+ <p class="hint" id="logInfo" style="margin-top:10px">Lokia ei ole vielä aloitettu.</p>
+ <div class="actions"><button class="secondary" id="allCsv">Vie koko mittausloki CSV</button><button class="secondary" id="selectedCsv">Vie valittu sarja CSV</button><button class="secondary" id="clearLog">Poista mittausloki</button></div>
+ <details><summary>Viimeisimmät tallennetut mittaukset</summary><div id="logList" class="muted" style="margin-top:10px">Ei mittauksia</div></details>
+ </section>
+<section class="card"><h2>Tallennetut vertailumittaukset</h2><div class="subrow" style="margin-bottom:10px"><label for="label">Mittauksen nimi</label><input id="label" maxlength="90" placeholder="Esim. laikka, asento 90°"/></div><div id="savedList" class="muted">Ei tallennettuja mittauksia</div><div class="actions" style="margin-top:10px"><button class="secondary" id="clearSaved">Poista tallennetut</button></div><p class="hint" style="margin-top:13px">Myös nämä yksittäiset vertailumittaukset säilyvät selaimen paikallisessa tallennustilassa. CSV-painike yllä vie vain erikseen tallennetut vertailumittaukset. Automaattisen lokin CSV-vienti on omassa osiossaan.</p></section>
+<section class="card"><details><summary>Käyttö ja rajaukset</summary><p style="margin-top:12px" class="hint">Chrome Androidilla ja HTTPS-yhteys tarvitaan. Paina Yhdistä BLE ja valitse Hiomakone-V41. Päivitysväli riippuu Arduinon analyysiajasta (nykyisin noin seitsemän sekuntia). Tilakoodi 1 = hyväksytty havaittava 40–60 Hz:n komponentti, 2 = hyväksytty mutta heikko, 3–4 = hylätty. Yhteyden katketessa tai mittauksen vanhetessa vanhoja arvoja ei näytetä reaaliaikaisina.</p><p class="hint">Arvioitu kierrosnopeus perustuu värinähuippuun, ei erilliseen kierroslukuanturiin. Lukema ei ole koneen turvallisuuden hyväksymismittaus. Älä säädä laippoja käyvän koneen aikana.</p></details></section>
+</main>
+<script>
+'use strict';
+const SERVICE='d6a10000-8d74-4dbe-b6a1-000000000001';
+const uuid = n => `d6a1${n.toString(16).padStart(4,'0')}-8d74-4dbe-b6a1-000000000001`;
+const keys={rms:4,frequency:6,rpm:7,count:8,status:9,velocity:10,total:11,rate:12,skips:13};
+const types={rms:'float',frequency:'float',rpm:'float',count:'uint16',status:'uint8',velocity:'float',total:'float',rate:'float',skips:'uint16'};
+const els=Object.fromEntries(['dot','connection','deviceName','connect','disconnect','message','rms','velocity','frequency','rpm','total','health','count','skips','rate','statusCode','updated','chart','save','csv','clearTrend','label','savedList','clearSaved','logState','sessionName','newSession','pauseLog','sessionSelect','statCount','statMean','statStd','statMinMax','logInfo','allCsv','selectedCsv','clearLog','logList'].map(x=>[x,document.getElementById(x)]));
+const STORE='hiomakone_v41_saved_1';
+const LOG_STORE='hiomakone_v41_autolog_v12';
+const LOG_LIMIT=5000;
+const storage=loadLog();
+let logRecords=storage.records, sessions=storage.sessions, currentSessionId=storage.currentSessionId, loggingPaused=storage.paused;
+let selectedSessionId=null, lastLogNotice='';
+function loadLog(){
+ try {
+  const d=JSON.parse(localStorage.getItem(LOG_STORE)||'null');
+  if(d&&Array.isArray(d.records)&&Array.isArray(d.sessions))return {records:d.records,sessions:d.sessions,currentSessionId:d.currentSessionId||null,paused:!!d.paused};
+ } catch(e) { /* Storage may be disabled. */ }
+ return {records:[],sessions:[],currentSessionId:null,paused:false};
+}
+function saveLog(){
+ try{localStorage.setItem(LOG_STORE,JSON.stringify({records:logRecords,sessions,currentSessionId,paused:loggingPaused}));return true}
+ catch(e){loggingPaused=true;lastLogNotice='Tallennus epäonnistui: selaimen tallennustila täynnä tai estetty. Vie CSV ennen jatkamista.';return false}
+}
+function newId(){return new Date().toISOString()+'_'+Math.random().toString(36).slice(2,9)}
+function addSession(name){
+ const id=newId();sessions.push({id,name:name||'Mittaus '+new Date().toLocaleString('fi-FI'),created:new Date().toISOString()});
+ currentSessionId=id;selectedSessionId=id;loggingPaused=false;lastLogNotice='';saveLog();renderLog();return id;
+}
+function ensureSession(){
+ if(!currentSessionId||!sessions.some(s=>s.id===currentSessionId))return addSession('Automaattinen mittaussarja '+new Date().toLocaleString('fi-FI'));
+ return currentSessionId;
+}
+function logMeasurement(x){
+ if(loggingPaused||!connected)return;
+ if(logRecords.length>=LOG_LIMIT){loggingPaused=true;lastLogNotice='Lokissa on 5000 mittausta. Vie CSV ja tyhjennä loki ennen jatkamista.';saveLog();renderLog();return}
+ const id=ensureSession();
+ const record={time:new Date().toISOString(),sessionId:id,rms:x.rms,total:x.total,frequency:x.frequency,velocity:x.velocity,rpm:x.rpm,count:x.count,skips:x.skips,rate:x.rate,status:x.status};
+ logRecords.push(record);
+ if(!saveLog()){logRecords.pop();note(lastLogNotice);}
+ renderLog();
+}
+function meanAndStd(numbers){
+ if(!numbers.length)return {mean:NaN,std:NaN,min:NaN,max:NaN};
+ const mean=numbers.reduce((a,b)=>a+b,0)/numbers.length;
+ const std=numbers.length<2?0:Math.sqrt(numbers.reduce((a,b)=>a+(b-mean)**2,0)/(numbers.length-1));
+ return {mean,std,min:Math.min(...numbers),max:Math.max(...numbers)};
+}
+function renderLog(){
+ els.logState.textContent=loggingPaused?'Tallennus keskeytetty':'Automaattitallennus päällä';
+ els.pauseLog.textContent=loggingPaused?'Jatka tallennusta':'Keskeytä tallennus';
+ const previous=selectedSessionId===null?currentSessionId:selectedSessionId;
+ els.sessionSelect.replaceChildren();
+ const allOption=document.createElement('option');allOption.value='all';allOption.textContent='Kaikki sarjat';els.sessionSelect.append(allOption);
+ for(const s of [...sessions].reverse()){
+  const option=document.createElement('option');option.value=s.id;option.textContent=s.name;els.sessionSelect.append(option);
+ }
+ selectedSessionId=previous&&sessions.some(s=>s.id===previous)?previous:'all';
+ els.sessionSelect.value=selectedSessionId;
+ const records=selectedSessionId==='all'?logRecords:logRecords.filter(r=>r.sessionId===selectedSessionId);
+ const samples=records.map(r=>r.rms).filter(Number.isFinite);
+ const a=meanAndStd(samples);
+ els.statCount.textContent=String(records.length);
+ els.statMean.textContent=fmt(a.mean,5);
+ els.statStd.textContent=fmt(a.std,5);
+ els.statMinMax.textContent=Number.isFinite(a.min)?fmt(a.min,5)+' / '+fmt(a.max,5):'—';
+ const name=sessions.find(s=>s.id===currentSessionId)?.name||'Ei sarjaa';
+ els.logInfo.textContent=`Yhteensä ${logRecords.length} / ${LOG_LIMIT} mittausta · ${sessions.length} sarjaa · Aktiivinen: ${name}`+(lastLogNotice?' · '+lastLogNotice:'');
+ els.logList.replaceChildren();
+ const last=records.slice(-15).reverse();
+ if(!last.length)els.logList.textContent='Ei mittauksia tässä sarjassa.';
+ for(const r of last){
+  const div=document.createElement('div');div.className='logline';
+  const label=sessions.find(s=>s.id===r.sessionId)?.name||'Tuntematon sarja';
+  div.textContent=`${new Date(r.time).toLocaleString('fi-FI')} · 1× ${fmt(r.rms,5)} g · kok. ${fmt(r.total,5)} g · tila ${r.status} · ${label}`;
+  els.logList.append(div);
+ }
+}
+function exportLog(which){
+ const rows=which==='all'?logRecords:logRecords.filter(r=>r.sessionId===selectedSessionId);
+ if(!rows.length){note('Valitussa lokissa ei ole vietäviä mittauksia.');return}
+ const fields=['time','session','rms','velocity','frequency','rpm','total','count','skips','rate','status'];
+ const lines=[fields.join(';'),...rows.map(r=>fields.map(k=>csvCell(k==='session'?(sessions.find(s=>s.id===r.sessionId)?.name||'Tuntematon'):r[k])).join(';'))];
+ const blob=new Blob(['\uFEFF'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'});
+ const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='hiomakone_autoloki_'+new Date().toISOString().slice(0,10)+'.csv';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);
+ note('Automaattisen mittauslokin CSV-vienti valmis: '+rows.length+' mittausta.');
+}
+
+let device=null, chars={}, connecting=false, connected=false, lastStatusTime=0, latest=null, received={};
+let series=[], saved=readSaved(), seenSeq=0;
+function readSaved(){try{const v=JSON.parse(localStorage.getItem(STORE)||'[]');return Array.isArray(v)?v.slice(0,500):[]}catch{return []}}
+function persist(){try{localStorage.setItem(STORE,JSON.stringify(saved));return true}catch{note('Tallennus ei onnistunut (selaimen tallennustila ei ole käytettävissä).');return false}}
+function note(s){els.message.textContent=s}
+function setConnection(mode, label){els.connection.textContent=label;els.dot.className='dot '+(mode==='ok'?'ok':mode==='warn'?'warn':mode==='bad'?'bad':'');els.connect.disabled=connecting||connected;els.disconnect.disabled=!connected}
+function fmt(value, digits=2){return Number.isFinite(value)?Number(value).toFixed(digits).replace('.',','):'—'}
+function readView(data,type){if(!data)return NaN;try{if(type==='float')return data.getFloat32(0,true);if(type==='uint16')return data.getUint16(0,true);return data.getUint8(0)}catch{return NaN}}
+function blankReadings(){for(const k of ['rms','frequency','rpm','velocity','total'])els[k].textContent='—';els.save.disabled=true}
+function setHealth(text,level){els.health.textContent=text;els.health.className='health '+level}
+function applyResult(){
+ const x={...received}; const status=x.status;
+ if (!Number.isFinite(status))return;
+ lastStatusTime=Date.now();
+ els.statusCode.textContent=status;
+ els.count.textContent=Number.isFinite(x.count)?x.count:'—';
+ els.skips.textContent=Number.isFinite(x.skips)?x.skips:'—';
+ els.rate.textContent=fmt(x.rate,1);
+ els.updated.textContent=new Date(lastStatusTime).toLocaleTimeString('fi-FI');
+ const validQuality=(status===1||status===2)&&x.count===800&&x.skips===0&&Number.isFinite(x.rate)&&x.rate>=350&&x.rate<=450;
+ const allNumeric=['rms','frequency','total'].every(k=>Number.isFinite(x[k])&&x[k]>=0);
+ if(!validQuality||!allNumeric){
+   const problems=[];
+   if(status!==1&&status!==2)problems.push('tilakoodi '+status);
+   if(x.count!==800)problems.push('näytemäärä '+(Number.isFinite(x.count)?x.count:'puuttuu'));
+   if(!Number.isFinite(x.skips))problems.push('FIFO-ohitusten arvo puuttuu');
+   else if(x.skips!==0)problems.push('FIFO-ohituksia '+x.skips);
+   if(!Number.isFinite(x.rate)||x.rate<350||x.rate>450)problems.push('keruunopeus '+(Number.isFinite(x.rate)?fmt(x.rate,1):'puuttuu'));
+   for(const k of ['rms','frequency','total'])if(!Number.isFinite(x[k])||x[k]<0)problems.push(k+'-arvo puuttuu tai on virheellinen');
+   latest=null;blankReadings();setHealth((status===4?'FIFO- tai I²C-virhe':status===0?'Odotetaan mittausta':'Mittauksen laatutarkistus epäonnistui')+' · '+problems.join(', '),'bad');return;
+ }
+ const strong=status===1;
+ latest={time:new Date().toISOString(),...x,status};
+ els.rms.textContent=fmt(x.rms,5);els.total.textContent=fmt(x.total,5);
+ els.frequency.textContent=strong?fmt(x.frequency,2):'—';
+ els.rpm.textContent=strong?fmt(x.rpm,0):'—';
+ els.velocity.textContent=strong?fmt(x.velocity,3):'—';
+ els.save.disabled=false;
+ setHealth(strong?'Hyväksytty mittaus · havaittava taajuuskomponentti':'Hyväksytty mittaus · heikko 1×-signaali; kierrosnopeutta ei arvioida',strong?'good':'warn');
+ // Kirjaa trendiin myös heikot mutta muutoin kelvolliset RMS-mittaukset.
+ series.push({time:Date.now(),rms:x.rms,strong});if(series.length>60)series.shift();drawChart();
+ logMeasurement(latest);
+}
+async function ensureMissingValues(){
+ // ArduinoBLE ei välttämättä lähetä uutta ilmoitusta, jos ominaisuuden arvo
+ // (esim. FIFO-ohitukset = 0) ei muutu. Luetaan puuttuvat arvot suoraan.
+ for(const key of ['skips','rms','frequency','total','count','rate']){
+  if(Number.isFinite(received[key])||!chars[key])continue;
+  try{received[key]=readView(await chars[key].readValue(),types[key]);}
+  catch(err){note('BLE-luku epäonnistui ('+key+'): '+(err.message||err));}
+ }
+}
+function onNotification(key,event){
+ received[key]=readView(event.target.value,types[key]);
+ if(key==='status'){
+  const seq=++seenSeq;
+  // Status saapuu lähetyskierroksen lopussa. Varmista tarvittavat arvot
+  // ennen kuin arvioidaan mittauksen laatua.
+  void (async()=>{await ensureMissingValues();if(seq===seenSeq&&connected)applyResult();})();
+ }
+}
+function onDisconnected(){connected=false;chars={};received={};latest=null;lastStatusTime=0;blankReadings();setConnection('bad','Yhteys katkennut');setHealth('Yhteys katkennut – mittaustulokset eivät ole reaaliaikaisia','bad');note('Yhdistä uudelleen painamalla Yhdistä BLE.');}
+async function connect(){
+ if(connecting||connected)return;
+ if(!window.isSecureContext){note('Web Bluetooth edellyttää HTTPS-osoitetta (tai localhost-kehitysympäristöä).');return}
+ if(!navigator.bluetooth){note('Selain ei tue Web Bluetoothia. Avaa sovellus Androidin Chromessa.');return}
+ connecting=true;els.connect.disabled=true;setConnection('warn','Yhdistetään…');note('Valitse Hiomakone-V41 Bluetooth-laitelistasta.');
+ try{
+  if(!device){device=await navigator.bluetooth.requestDevice({filters:[{name:'Hiomakone-V41'}],optionalServices:[SERVICE]});device.addEventListener('gattserverdisconnected',onDisconnected)}
+  const server=await device.gatt.connect();
+  const service=await server.getPrimaryService(SERVICE);
+  chars={};received={};lastStatusTime=0;latest=null;blankReadings();
+  // Tilatieto tilataan viimeiseksi: V4.1 kirjoittaa sen jokaisen mittauskierroksen lopussa.
+  for(const key of ['rms','frequency','rpm','count','velocity','total','rate','skips','status']){
+    const characteristic=await service.getCharacteristic(uuid(keys[key]));
+    chars[key]=characteristic;
+    characteristic.addEventListener('characteristicvaluechanged',event=>onNotification(key,event));
+    await characteristic.startNotifications();
+  }
+  // Esitäytetään etenkin muuttumaton FIFO-ohituslaskuri lukemalla se suoraan.
+  try{received.skips=readView(await chars.skips.readValue(),types.skips)}catch(err){note('FIFO-ohitusten alkulukua ei saatu: '+(err.message||err))}
+  connected=true;els.deviceName.textContent=device.name||'Bluetooth-laite';setConnection('ok','Yhdistetty');setHealth('Odotetaan seuraavan mittausjakson tulosta','warn');note('Yhteys muodostettu. Mittausarvot päivittyvät automaattisesti.');
+ }catch(err){const message=err&&err.message?err.message:String(err);note('Yhdistäminen epäonnistui: '+message); if(device?.gatt?.connected)device.gatt.disconnect();setConnection('bad','Ei yhteyttä')}
+ finally{connecting=false;els.connect.disabled=connected}
+}
+function disconnect(){if(device?.gatt?.connected)device.gatt.disconnect();else onDisconnected()}
+function saveMeasurement(){if(!latest||!connected||Date.now()-lastStatusTime>9000)return;const label=els.label.value.trim()||'Mittaus '+new Date().toLocaleString('fi-FI');saved.unshift({...latest,label});if(saved.length>500)saved.pop();persist();renderSaved();note('Mittaus tallennettu paikallisesti.');els.label.value=''}
+function renderSaved(){els.savedList.replaceChildren();if(!saved.length){els.savedList.textContent='Ei tallennettuja mittauksia';return}saved.forEach((s,i)=>{const item=document.createElement('div');item.className='entry';const desc=document.createElement('div');const title=document.createElement('strong');title.textContent=s.label||'Mittaus';const sub=document.createElement('div');sub.className='muted';sub.textContent=`${new Date(s.time).toLocaleString('fi-FI')} · 1× ${fmt(s.rms,5)} g · ${s.status===1?fmt(s.frequency,2)+' Hz':'heikko signaali'} · tila ${s.status}`;desc.append(title,sub);const remove=document.createElement('button');remove.className='secondary';remove.textContent='Poista';remove.addEventListener('click',()=>{saved.splice(i,1);persist();renderSaved()});item.append(desc,remove);els.savedList.append(item)})}
+function csvCell(v){const str=String(v??'');return '"'+str.replaceAll('"','""')+'"'}
+function exportCsv(){if(!saved.length){note('Ei tallennettuja mittauksia vietäväksi.');return}const fields=['time','label','rms','velocity','frequency','rpm','total','count','skips','rate','status'];const lines=[fields.join(';'),...saved.map(s=>fields.map(k=>csvCell(s[k])).join(';'))];const blob=new Blob(['\uFEFF'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='hiomakone_mittaukset_'+new Date().toISOString().slice(0,10)+'.csv';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);note('CSV-tiedosto luotu.')}
+function drawChart(){
+ const canvas=els.chart;const rect=canvas.getBoundingClientRect();const dpr=Math.min(window.devicePixelRatio||1,3);if(!rect.width)return;canvas.width=Math.max(1,Math.round(rect.width*dpr));canvas.height=Math.round(220*dpr);const ctx=canvas.getContext('2d');ctx.scale(dpr,dpr);const w=rect.width,h=220;ctx.clearRect(0,0,w,h);const left=55,right=w-12,top=16,bottom=h-34;
+ ctx.font='12px system-ui';ctx.textBaseline='middle';const max=Math.max(0.001,...series.map(v=>v.rms))*1.12;
+ for(let i=0;i<=4;i++){const y=top+(bottom-top)*i/4;ctx.strokeStyle='#34475f';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(left,y);ctx.lineTo(right,y);ctx.stroke();ctx.fillStyle='#a8b8ce';ctx.fillText(fmt(max*(1-i/4),4),5,y)}
+ ctx.fillStyle='#a8b8ce';ctx.fillText('g RMS',5,10);ctx.fillText('Vanhin',left,bottom+20);ctx.fillText('Uusin',right-35,bottom+20);
+ if(!series.length){ctx.fillText('Ei vielä hyväksyttyjä mittauksia',left+12,top+45);return}
+ const xPos=i=>left+(right-left)*(series.length===1?0.5:i/(series.length-1));const yPos=p=>bottom-(p.rms/max)*(bottom-top);
+ ctx.strokeStyle='#5ee0c4';ctx.lineWidth=2.5;ctx.beginPath();series.forEach((p,i)=>{const x=xPos(i),y=yPos(p);i?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.stroke();for(let i=0;i<series.length;i++){const p=series[i];ctx.fillStyle=p.strong?'#5ee0c4':'#ffcf80';ctx.beginPath();ctx.arc(xPos(i),yPos(p),3,0,Math.PI*2);ctx.fill()}
+}
+els.newSession.addEventListener('click',()=>{const name=els.sessionName.value.trim()||'Mittaus '+new Date().toLocaleString('fi-FI');addSession(name);els.sessionName.value='';note('Uusi mittaussarja aloitettu: '+name)});
+els.pauseLog.addEventListener('click',()=>{loggingPaused=!loggingPaused;if(!loggingPaused)ensureSession();saveLog();renderLog();note(loggingPaused?'Automaattinen tallennus keskeytetty.':'Automaattinen tallennus jatkuu.')});
+els.sessionSelect.addEventListener('change',()=>{selectedSessionId=els.sessionSelect.value;renderLog()});
+els.allCsv.addEventListener('click',()=>exportLog('all'));
+els.selectedCsv.addEventListener('click',()=>exportLog('selected'));
+els.clearLog.addEventListener('click',()=>{if(!logRecords.length&&!sessions.length)return;if(!confirm('Poistetaanko KAIKKI automaattisesti tallennetut mittaukset ja mittaussarjat? Vie CSV ensin, jos haluat säilyttää ne.'))return;logRecords=[];sessions=[];currentSessionId=null;selectedSessionId='all';lastLogNotice='';saveLog();renderLog();note('Automaattinen mittausloki tyhjennetty.')});
+els.connect.addEventListener('click',connect);els.disconnect.addEventListener('click',disconnect);els.save.addEventListener('click',saveMeasurement);els.csv.addEventListener('click',exportCsv);els.clearTrend.addEventListener('click',()=>{series=[];drawChart();note('Vain näkyvä trendikäyrä tyhjennetty. Mittausloki säilyy.')});els.clearSaved.addEventListener('click',()=>{if(!saved.length)return;if(confirm('Poistetaanko kaikki tallennetut vertailumittaukset?')){saved=[];persist();renderSaved()}});
+setInterval(()=>{if(connected&&lastStatusTime&&Date.now()-lastStatusTime>9000){latest=null;blankReadings();setHealth('Mittaus ei päivity – viimeisin tulos on vanhentunut','bad');setConnection('warn','Yhdistetty, ei tuoretta dataa')}else if(connected&&lastStatusTime&&Date.now()-lastStatusTime<=9000&&els.connection.textContent.includes('ei tuoretta')){setConnection('ok','Yhdistetty')}},1000);
+window.addEventListener('resize',drawChart);renderSaved();renderLog();series=logRecords.slice(-60).map(r=>({time:Date.parse(r.time),rms:r.rms,strong:r.status===1}));drawChart();
+if(!window.isSecureContext)note('Huomio: avaa sovellus HTTPS-osoitteesta. Paikallinen tiedosto ei välttämättä salli Bluetooth-yhteyttä.');
+else if(!navigator.bluetooth)note('Web Bluetooth ei ole käytettävissä tässä selaimessa. Käytä Androidin Chromea.');
+</script></body></html>
