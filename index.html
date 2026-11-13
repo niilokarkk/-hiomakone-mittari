@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0b1626">
-<title>Hiomakone · V4.1 · Sovellus 1.4</title>
+<title>Hiomakone · V4.1 · Sovellus 1.5</title>
 <style>
 :root { color-scheme: dark; --bg:#08111f; --card:#122138; --card2:#172a43; --line:#304158; --ink:#eff5ff; --muted:#a8b8ce; --accent:#5ee0c4; --red:#ff8585; --amber:#ffcf80; }
 *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.45}main{max-width:760px;margin:auto;padding:18px 14px 65px}.eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);font-weight:700}h1{font-size:29px;line-height:1.12;margin:7px 0 5px}h2{font-size:17px;margin:0 0 12px}p{margin:0 0 12px}.muted,small{color:var(--muted)}.top{margin-bottom:18px}.card{background:var(--card);border:1px solid #263850;border-radius:16px;padding:16px;margin:12px 0}.connect{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:space-between}.status{display:flex;align-items:center;gap:8px;font-weight:650}.dot{height:11px;width:11px;border-radius:100%;background:#8694a8;flex:none}.dot.ok{background:var(--accent)}.dot.warn{background:var(--amber)}.dot.bad{background:var(--red)}button{font:inherit;cursor:pointer;border:0;border-radius:10px;padding:11px 14px;background:var(--accent);color:#07251f;font-weight:750;min-height:44px}button.secondary{background:#29415a;color:var(--ink)}button:disabled{opacity:.45;cursor:not-allowed}.actions{display:flex;gap:9px;flex-wrap:wrap} .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.metric{background:var(--card2);padding:14px;border-radius:12px;min-width:0}.metric.primary{grid-column:span 2;background:#113b42}.value{font-size:30px;font-weight:780;font-variant-numeric:tabular-nums;letter-spacing:-.03em;word-break:break-word}.metric.primary .value{font-size:43px}.label{color:var(--muted);font-size:13px}.unit{font-size:14px;color:var(--muted);font-weight:500}.health{padding:10px 12px;border-radius:10px;background:#1d3047;margin-top:12px;color:var(--muted);font-size:14px}.health.good{color:var(--accent)}.health.bad{color:var(--red)}.health.warn{color:var(--amber)}canvas{display:block;width:100%;height:220px}.subrow{display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap}input{font:inherit;background:#0b1a2d;color:var(--ink);border:1px solid #50617a;border-radius:10px;padding:10px;min-width:0;flex:1}label{font-size:13px;color:var(--muted)}.entry{display:flex;align-items:start;gap:10px;justify-content:space-between;border-top:1px solid var(--line);padding:10px 0;font-size:13px}.entry strong{font-size:15px}.entry button{font-size:12px;padding:7px 9px;min-height:32px}details{margin-top:10px}summary{cursor:pointer;color:var(--muted)}code{word-break:break-all}#message{min-height:22px;color:var(--muted);font-size:13px;margin-top:10px}.hint{font-size:13px;color:var(--muted)}.hidden{display:none!important}a{color:var(--accent)}select{font:inherit;background:#0b1a2d;color:var(--ink);border:1px solid #50617a;border-radius:10px;padding:10px;min-width:0;max-width:100%}.statgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.statbox{background:var(--card2);border-radius:10px;padding:10px}.statbox strong{font-size:19px;font-variant-numeric:tabular-nums}.controlrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.logline{padding:9px 0;border-bottom:1px solid var(--line);font-size:13px}.tiny{font-size:12px}.tag{display:inline-block;border-radius:7px;padding:2px 6px;background:#234559;color:var(--accent);font-size:12px}.warn-text{color:var(--amber)}
@@ -14,7 +14,7 @@
 </style>
 </head>
 <body><main>
-<header class="top"><div class="eyebrow">Arduino Nano 33 BLE Sense Rev2</div><h1>Hiomakoneen värinämittari</h1><p class="muted">V4.1 · BMI270 FIFO · BLE · 40–60 Hz · sovellus 1.4</p></header>
+<header class="top"><div class="eyebrow">Arduino Nano 33 BLE Sense Rev2</div><h1>Hiomakoneen värinämittari</h1><p class="muted">V4.1 · BMI270 FIFO · BLE · 40–60 Hz · sovellus 1.5</p></header>
 <section class="card">
  <div class="connect"><div><div class="status"><span id="dot" class="dot"></span><span id="connection">Ei yhteyttä</span></div><small id="deviceName">Ei valittua laitetta</small></div><div class="actions"><button id="connect">Yhdistä BLE</button><button class="secondary" id="disconnect" disabled>Katkaise</button></div></div>
  <div id="message" aria-live="polite">Avaa sivu Androidin Chromessa HTTPS-osoitteesta. Sulje nRF Connectin yhteys ennen yhdistämistä.</div>
@@ -45,22 +45,24 @@
  <details><summary>Viimeisimmät tallennetut mittaukset</summary><div id="logList" class="muted" style="margin-top:10px">Ei mittauksia</div></details>
  </section>
 <section class="card" id="balanceSection">
- <div class="subrow"><h2 style="margin:0">Ohjattu tasapainotus · uuden laikan koe V1.4</h2><span class="tag">α / β</span></div>
- <p class="hint">Merkitse ensin laikan staattisesti löydetty painavin kohta nollasuunnaksi. Ensimmäinen koe käyttää yhteisiä suuntia +60°, +30°, 0°, −30° ja −60° sekä β = 45°. Sovellus laskee ehdotuksen ja ohjaa sen jälkeen β-kokeet. Laite ei säädä kiekkoja itse.</p>
+ <div class="subrow"><h2 style="margin:0">Ohjattu tasapainotus · V1.5</h2><span class="tag">α → β → α → tarkistus</span></div>
+ <p class="hint">Suuntautuva α-haku aloitetaan staattisen tasapainotuksen 0°-suunnasta ja jatkuu ensisijaisesti pienemmän värinän puolelle. Mittauspisteissä kerätään ensin 3 näytettä; minimin ympäristö täydennetään 6 näytteeseen. Laippoja säädetään käsin kone pysäytettynä.</p>
  <div class="bal-grid">
-   <div class="bal-field"><label>α-kokeen suunnat (°)</label><div class="bal-step">+60, +30, 0, −30, −60</div></div>
-   <div class="bal-field"><label for="balBetaFixed">α-kokeen β (°)</label><input id="balBetaFixed" type="number" min="5" max="85" step="1" value="45"></div>
-   <div class="bal-field"><label for="balN">Mittauksia/asento</label><input id="balN" type="number" min="3" max="20" step="1" value="6"></div>
-   <div class="bal-field"><label for="balBetaStep">β-kokeen askel (°)</label><input id="balBetaStep" type="number" min="1" max="15" step="1" value="10"></div>
+  <div class="bal-field"><label for="balBetaFixed">α-haun kiinteä β (°)</label><input id="balBetaFixed" type="number" min="1" max="85" step="1" value="15"></div>
+  <div class="bal-field"><label for="balAlphaStep">α-haun askel (°)</label><input id="balAlphaStep" type="number" min="5" max="30" step="1" value="15"></div>
+  <div class="bal-field"><label for="balAlphaLimit">α-haun enimmäispoikkeama (°)</label><input id="balAlphaLimit" type="number" min="15" max="90" step="5" value="30"></div>
+  <div class="bal-field"><label for="balBetaStep">β-haun askel (°)</label><input id="balBetaStep" type="number" min="1" max="20" step="1" value="10"></div>
+  <div class="bal-field"><label for="balN">Tarkat mittaukset / asento</label><input id="balN" type="number" min="4" max="20" step="1" value="6"></div>
+  <div class="bal-field"><label for="balQuick">Alustavat mittaukset / asento</label><input id="balQuick" type="number" min="2" max="6" step="1" value="3"></div>
  </div>
  <div class="actions"><button id="balStart">Aloita uusi ohjattu koe</button><button id="balReset" class="secondary">Tyhjennä ohjatun kokeen tiedot</button></div>
- <div class="health warn" id="balState">Aloita koe yllä olevasta painikkeesta. Vanha mittausloki säilyy.</div>
- <div class="bal-instructions" id="balInstructions"></div>
+ <div class="health warn" id="balState">Aloita koe yllä olevasta painikkeesta.</div>
+ <div class="bal-instructions" id="balInstructions" style="margin-top:10px"></div>
  <div id="balPoints" class="bal-list"></div>
- <div class="actions" style="margin-top:10px"><button id="balCapture" disabled>Kerää tämän asennon mittaukset</button><button id="balStop" class="secondary" disabled>Keskeytä keruu</button><button id="balNext" class="secondary" disabled>Siirry β-vaiheeseen</button></div>
+ <div class="actions" style="margin-top:10px"><button id="balCapture" disabled>Kerää tämän asennon mittaukset</button><button id="balStop" class="secondary" disabled>Keskeytä keruu</button><button id="balNext" class="secondary" disabled>Seuraava vaihe</button><button id="balExtend" class="secondary hidden">Laajenna / jatka hakua</button></div>
  <div class="bal-result" id="balResult" style="margin-top:12px">Tulokset ilmestyvät tähän mittausten jälkeen.</div>
  <div class="actions" style="margin-top:10px"><button class="secondary" id="balCsv">Vie ohjatun kokeen CSV</button></div>
- <p class="bal-footer">Säädä kiekkoja vain kone pysäytettynä ja sähköverkosta irrotettuna. Varmista ennen pyöritystä mekaanisen kokoonpanon soveltuvuus ja lukitus. Matemaattinen arvio ei ole mekaaninen turvallisuushyväksyntä. 1× RMS on värinän amplitudi, ei suora mittaus epätasapainomassasta.</p>
+ <p class="bal-footer">Mittaukseen perustuva säätöehdotus, ei koneen turvallisuuden tai pyörivän kokoonpanon hyväksyntä. Pysäytä kone ja irrota sähköverkosta ennen laippojen säätämistä. Pidä kiinnitykset ja suojukset kunnossa. Jos värinä on poikkeuksellisen voimakasta, pysäytä kone äläkä jatka koetta.</p>
 </section>
 <section class="card"><h2>Tallennetut vertailumittaukset</h2><div class="subrow" style="margin-bottom:10px"><label for="label">Mittauksen nimi</label><input id="label" maxlength="90" placeholder="Esim. laikka, asento 90°"/></div><div id="savedList" class="muted">Ei tallennettuja mittauksia</div><div class="actions" style="margin-top:10px"><button class="secondary" id="clearSaved">Poista tallennetut</button></div><p class="hint" style="margin-top:13px">Myös nämä yksittäiset vertailumittaukset säilyvät selaimen paikallisessa tallennustilassa. CSV-painike yllä vie vain erikseen tallennetut vertailumittaukset. Automaattisen lokin CSV-vienti on omassa osiossaan.</p></section>
 <section class="card"><details><summary>Käyttö ja rajaukset</summary><p style="margin-top:12px" class="hint">Chrome Androidilla ja HTTPS-yhteys tarvitaan. Paina Yhdistä BLE ja valitse Hiomakone-V41. Päivitysväli riippuu Arduinon analyysiajasta (nykyisin noin seitsemän sekuntia). Tilakoodi 1 = hyväksytty havaittava 40–60 Hz:n komponentti, 2 = hyväksytty mutta heikko, 3–4 = hylätty. Yhteyden katketessa tai mittauksen vanhetessa vanhoja arvoja ei näytetä reaaliaikaisina.</p><p class="hint">Arvioitu kierrosnopeus perustuu värinähuippuun, ei erilliseen kierroslukuanturiin. Lukema ei ole koneen turvallisuuden hyväksymismittaus. Älä säädä laippoja käyvän koneen aikana.</p></details></section>
@@ -265,117 +267,109 @@ window.addEventListener('resize',drawChart);renderSaved();renderLog();series=log
 if(!window.isSecureContext)note('Huomio: avaa sovellus HTTPS-osoitteesta. Paikallinen tiedosto ei välttämättä salli Bluetooth-yhteyttä.');
 else if(!navigator.bluetooth)note('Web Bluetooth ei ole käytettävissä tässä selaimessa. Käytä Androidin Chromea.');
 
-// Ohjattu amplitudipohjainen tasapainotus, ei muuta Arduinon BLE-rajapintaa.
-const BS='hiomakone_balance_wizard_v14';
+// Ohjattu tasapainotus V1.5 – ei muutoksia BLE-protokollaan.
+const BS='hiomakone_balance_wizard_v15';
 const be=id=>document.getElementById(id);
 let bal=null, balCapture=null;
-function balSave(){try{localStorage.setItem(BS,JSON.stringify(bal));return true}catch(e){balMsg('Ohjatun kokeen tallennus epäonnistui, vie CSV.');return false}}
-function balLoad(){try{const x=JSON.parse(localStorage.getItem(BS)||'null');return x&&Array.isArray(x.alpha)&&Array.isArray(x.beta)?x:null}catch{return null}}
-function balMsg(txt){be('balState').textContent=txt}
-function balNum(id,lo,hi){const v=Number(be(id).value);if(!Number.isFinite(v)||v<lo||v>hi)throw Error('Tarkista '+id+' ('+lo+'…'+hi+').');return v}
+const BAL_STAGES=['alpha','beta','fine','verify'];
+function balMsg(t){be('balState').textContent=t}
+function balSave(){try{localStorage.setItem(BS,JSON.stringify(bal))}catch{balMsg('Tallennus epäonnistui, vie CSV.')}}
+function balLoad(){try{let x=JSON.parse(localStorage.getItem(BS)||'null');return x&&x.version===15&&BAL_STAGES.every(k=>Array.isArray(x[k]))?x:null}catch{return null}}
+function balNum(id,lo,hi){let v=Number(be(id).value);if(!Number.isFinite(v)||v<lo||v>hi)throw Error('Virheellinen asetus: '+id);return v}
 function balAngles(alpha,beta){return {left:alpha-beta,right:alpha+beta}}
-
-// Ratkaise pienimmän neliösumman sovitus 3 muuttujalle.
-function balFit(samples,getX,getY){
- if(samples.length<3)return null;
- const mat=Array.from({length:3},()=>[0,0,0,0]);
- for(const p of samples){const x=getX(p),y=getY(p),v=[1,x,x*x];if(!Number.isFinite(x)||!Number.isFinite(y))return null;for(let i=0;i<3;i++){for(let j=0;j<3;j++)mat[i][j]+=v[i]*v[j];mat[i][3]+=v[i]*y}}
- for(let k=0;k<3;k++){let ix=k;for(let i=k+1;i<3;i++)if(Math.abs(mat[i][k])>Math.abs(mat[ix][k]))ix=i;
- if(Math.abs(mat[ix][k])<1e-15)return null;[mat[k],mat[ix]]=[mat[ix],mat[k]];const d=mat[k][k];for(let j=k;j<4;j++)mat[k][j]/=d;
- for(let i=0;i<3;i++)if(i!==k){let z=mat[i][k];for(let j=k;j<4;j++)mat[i][j]-=z*mat[k][j]}}
- const c=mat.map(row=>row[3]);const rmse=Math.sqrt(samples.reduce((acc,p)=>{let x=getX(p),d=getY(p)-(c[0]+c[1]*x+c[2]*x*x);return acc+d*d},0)/samples.length);
- return {c,rmse};
-}
-function balSummarize(p){const a=p.samples.map(s=>s.rms);const n=a.length; if(!n)return null;const mu=a.reduce((x,y)=>x+y,0)/n;const st=n>1?Math.sqrt(a.reduce((x,y)=>x+(y-mu)**2,0)/(n-1)):0;return {n,mean:mu,std:st}}
-function balEstimateAlpha(){
- const pts=bal.alpha.filter(p=>p.samples.length>=bal.n).map(p=>({...p,m:balSummarize(p).mean}));
- if(pts.length<5)return null;
- // Värinän neliö vs. kiertokulma: C + P cos(alpha) + Q sin(alpha).
- // Lineaarinen LS kolmelle kertoimelle; koko suunnan malli, ei paikallinen paraabeli.
- const mat=Array.from({length:3},()=>[0,0,0,0]);
- for(const p of pts){const r=p.alpha*Math.PI/180, v=[1,Math.cos(r),Math.sin(r)],y=p.m*p.m;
-  for(let i=0;i<3;i++){for(let j=0;j<3;j++)mat[i][j]+=v[i]*v[j];mat[i][3]+=v[i]*y;}}
- for(let k=0;k<3;k++){let ix=k;for(let i=k+1;i<3;i++)if(Math.abs(mat[i][k])>Math.abs(mat[ix][k]))ix=i;
-  if(Math.abs(mat[ix][k])<1e-20)return {valid:false,reason:'Suuntamallin sovitus epäonnistui.'};
-  [mat[k],mat[ix]]=[mat[ix],mat[k]];let d=mat[k][k];for(let j=k;j<4;j++)mat[k][j]/=d;
-  for(let i=0;i<3;i++)if(i!==k){let z=mat[i][k];for(let j=k;j<4;j++)mat[i][j]-=z*mat[k][j]}}
- const [c,pc,qs]=mat.map(r=>r[3]);const amplitude=Math.hypot(pc,qs);
- if(amplitude<1e-12)return {valid:false,reason:'Suunta ei erotu mittauksista: värinä ei riipu riittävästi suunnasta.'};
- let alpha=Math.atan2(-qs,-pc)*180/Math.PI;
- if(alpha>180)alpha-=360;if(alpha<=-180)alpha+=360;
- const lo=Math.min(...pts.map(p=>p.alpha)),hi=Math.max(...pts.map(p=>p.alpha));
- if(alpha<lo||alpha>hi)return {valid:false,reason:'Laskettu suunta '+fmt(alpha,1)+'° on koealueen '+lo+'…'+hi+'° ulkopuolella. Tarvitaan lisämittauksia tai laajempi suuntakoe.'};
- const residual=pts.reduce((sum,p)=>{let r=p.alpha*Math.PI/180,e=p.m*p.m-(c+pc*Math.cos(r)+qs*Math.sin(r));return sum+e*e},0);
- const rmse=Math.sqrt(residual/pts.length);
- const minSq=c-amplitude;
- const scale=Math.max(...pts.map(p=>p.m*p.m))-Math.min(...pts.map(p=>p.m*p.m));
- if(rmse>Math.max(scale*0.25,1e-10))return {valid:false,reason:'Mittaukset eivät sovi riittävän hyvin sinimuotoiseen malliin. Sovitusvirhe on suuri; tarkista mittausolosuhteet ja toista koe.'};
- if(minSq < -Math.max(rmse*2,1e-10))return {valid:false,reason:'Malli ennustaa fysikaalisesti mahdottoman negatiivisen 1× RMS²:n. Malli ei ole riittävän luotettava; tee tarkistusmittauksia.'};
- return {valid:true,value:alpha,rmse,predicted:Math.sqrt(Math.max(minSq,0)),points:pts};
-}
-function balEstimateBeta(){
- const pts=bal.beta.filter(p=>p.samples.length>=bal.n).map(p=>({...p,m:balSummarize(p).mean}));
- if(pts.length<3)return null;
- const fit=balFit(pts,p=>Math.cos(p.beta*Math.PI/180),p=>p.m*p.m);if(!fit)return {valid:false,reason:'Sovitus epäonnistui.'};
- const [c0,c1,c2]=fit.c;
- if(c2<=0)return {valid:false,reason:'β-kokeessa ei näy kelvollista kuperaa minimikäyrää. Tarvitaan lisäpisteitä.'};
- const x=-c1/(2*c2);if(x<0||x>1)return {valid:false,reason:'Laskettu β jää fysikaalisen 0–90° alueen ulkopuolelle.'};
- const beta=Math.acos(x)*180/Math.PI;const lo=Math.min(...pts.map(p=>p.beta)),hi=Math.max(...pts.map(p=>p.beta));
- if(beta<=lo||beta>=hi)return {valid:false,reason:'β-minimi ('+fmt(beta,1)+'°) jää koevälin ulkopuolelle ('+lo+'…'+hi+'°). Laajenna kokeita.'};
- const val=c0+c1*x+c2*x*x;
- return {valid:true,value:beta,rmse:fit.rmse,predicted:Math.sqrt(Math.max(val,0)),points:pts};
-}
-function balStart(){try{
- const fixedBeta=balNum('balBetaFixed',5,85),n=balNum('balN',3,20),step=balNum('balBetaStep',1,15);
- if(!confirm('Aloitetaanko uusi ohjattu koe? Aiemmat ohjatun kokeen tulokset korvataan. Automaattinen mittausloki säilyy.'))return;
- bal={fixedBeta,n,step,phase:'alpha',alpha:[60,30,0,-30,-60].map(alpha=>({alpha,beta:fixedBeta,samples:[]})),beta:[],created:new Date().toISOString()};balCapture=null;balSave();balRender();
- }catch(e){balMsg(e.message)}}
-function balStageBeta(){if(!bal)return;const est=balEstimateAlpha();if(!est?.valid){balMsg('Ensin tarvitaan kelvollinen arvio α:sta.');return}
- bal.phase='beta';bal.estimatedAlpha=est.value;
- const around=bal.fixedBeta;const bs=[around-bal.step,around,around+bal.step];if(bs.some(x=>x<1||x>89)){balMsg('β-askel menee 1–89° rajan yli. Aloita uusi koe pienemmällä askeleella.');return}
- bal.beta=bs.map(beta=>({alpha:est.value,beta,samples:[]}));balCapture=null;balSave();balRender();}
-function balBeginCapture(){if(!bal||balCapture||!connected)return;const pts=bal[bal.phase],index=pts.findIndex(p=>p.samples.length<bal.n);if(index<0)return;
- if(!confirm('Varmista, että laipat on säädetty näytettyihin kulmiin, koneen suojus ja kiinnitys ovat kunnossa ja kone käy vakaalla nopeudella. Aloitetaanko uusien mittausten keruu?'))return;
- balCapture={phase:bal.phase,index,started:Date.now()};balRender();}
-function balanceOnMeasurement(x){if(!balCapture||!bal||!connected)return;if(balCapture.phase!==bal.phase)return;
- // vain uudet, kelvolliset ja voimassa olevat mittaukset, ei vanhojen arvojen toistoa
- if(x.status!==1&&x.status!==2)return;
- if(x.count!==800||x.skips!==0||!Number.isFinite(x.rms)||!Number.isFinite(x.rate)||x.rate<350||x.rate>450)return;
- const p=bal[bal.phase][balCapture.index];if(!p||p.samples.length>=bal.n)return;
- p.samples.push({time:x.time,rms:x.rms,total:x.total,status:x.status,frequency:x.frequency});
- if(p.samples.length>=bal.n)balCapture=null;
- balSave();balRender();
-}
-function balCSV(){if(!bal){balMsg('Ohjattua koetta ei vielä ole.');return}
- const head=['stage','alpha_deg','beta_deg','disk1_deg','disk2_deg','time','rms_g','total_g','status','frequency_hz'];let lines=[head.join(';')];for(const stage of ['alpha','beta'])for(const p of bal[stage])for(const r of p.samples){const d=balAngles(p.alpha,p.beta);lines.push([stage,p.alpha,p.beta,d.left,d.right,r.time,r.rms,r.total,r.status,r.frequency].map(csvCell).join(';'))}
- const blob=new Blob(['\uFEFF'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='hiomakone_ohjattu_v14_'+new Date().toISOString().slice(0,10)+'.csv';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);balMsg('Ohjatun kokeen CSV ladattu ('+(lines.length-1)+' mittausta).');}
-function balRender(){
- if(!bal){be('balInstructions').textContent='';be('balPoints').replaceChildren();be('balCapture').disabled=true;be('balStop').disabled=true;be('balNext').disabled=true;be('balResult').textContent='Ei ohjattua koetta. Aloita uusi koe.';return}
- const pts=bal[bal.phase],next=pts.findIndex(p=>p.samples.length<bal.n),done=next<0;
- be('balInstructions').textContent=bal.phase==='alpha'?'Vaihe 1/2: merkitse laikan staattinen raskain kohta 0°:ksi. Pidä β = '+fmt(bal.fixedBeta,1)+'° vakiona. Mittaa +60°, +30°, 0°, −30°, −60°.':'Vaihe 2/2: pidä α = '+fmt(bal.estimatedAlpha,1)+'° vakiona. Mittaa kolme β-asentoa.';
- be('balPoints').replaceChildren();pts.forEach((p,i)=>{const stats=balSummarize(p),angles=balAngles(p.alpha,p.beta),row=document.createElement('div');row.className='entry'+(i===next?' current':'');const label=document.createElement('div');const strong=document.createElement('strong');strong.textContent=(i+1)+'. α='+fmt(p.alpha,1)+'°, β='+fmt(p.beta,1)+'°';const sub=document.createElement('div');sub.className='muted';sub.textContent='Kiekot: '+fmt(angles.left,1)+'° ja '+fmt(angles.right,1)+'° · '+p.samples.length+'/'+bal.n+' mittausta'+(stats?' · RMS '+fmt(stats.mean,5)+' g ± '+fmt(stats.std,5):'');label.append(strong,sub);row.append(label);if(i===next){const note=document.createElement('span');note.className='bal-progress';note.textContent=balCapture?'Kerätään…':'Seuraava';row.append(note)}be('balPoints').append(row)});
- be('balCapture').disabled=Boolean(balCapture)||done||!connected;be('balStop').disabled=!balCapture;
- be('balCapture').textContent=balCapture?'Kerätään… ('+pts[balCapture.index].samples.length+'/'+bal.n+')':'Kerää tämän asennon mittaukset';
- const alpha=balEstimateAlpha();be('balNext').disabled=bal.phase!=='alpha'||!done||!alpha?.valid;
- let result=[];
- if(alpha?.valid){result.push('α-arvio: '+fmt(alpha.value,2)+'° · viiden pisteen sinimuotoinen RMS²-sovitus.');result.push('Alustava β-ehdotus: '+fmt(bal.fixedBeta,1)+'° (koeasetus, ei vielä laskettu optimi).');}
- else if(alpha&&!alpha.valid)result.push('α-sovitus: '+alpha.reason);
- if(bal.phase==='beta'){
-  const beta=balEstimateBeta();if(beta?.valid){const a=bal.estimatedAlpha,b=beta.value,d=balAngles(a,b);result.push('β-arvio: '+fmt(b,2)+'° · kiekkojen välinen kulma '+fmt(2*b,2)+'°.');result.push('Ehdotetut kiekkoasennot: '+fmt(d.left,2)+'° ja '+fmt(d.right,2)+'° suhteessa merkittyyn nollakohtaan.');result.push('Ennustettu RMS on vain malliarvio. Tarkista tulos erillisellä vahvistusmittauksella.');}
-  else if(beta&&!beta.valid)result.push('β-sovitus: '+beta.reason);
+function balRound(x){return Math.round(x*1e5)/1e5}
+function balPoint(stage,angle){return {alpha:stage==='beta'?bal.estimatedAlpha:angle,beta:stage==='beta'?angle:stage==='alpha'?bal.fixedBeta:bal.estimatedBeta,samples:[]}}
+function balAdd(stage,angle){let key=stage==='beta'?'beta':'alpha';if(bal[stage].some(p=>Math.abs(p[key]-angle)<1e-5))return false;bal[stage].push(balPoint(stage,balRound(angle)));return true}
+function balStats(p){let a=p.samples.filter(x=>x.status===1).map(x=>x.rms),n=a.length;if(!n)return null;let mean=a.reduce((s,v)=>s+v,0)/n,std=n>1?Math.sqrt(a.reduce((s,v)=>s+(v-mean)**2,0)/(n-1)):0;return {n,mean,std}}
+function balReady(p){return (balStats(p)?.n||0)>=bal.quick}
+function balFull(p){return (balStats(p)?.n||0)>=bal.n}
+function balCompared(p,q){let a=balStats(p),b=balStats(q);if(!a||!b)return 0;let delta=a.mean-b.mean;let uncertainty=Math.hypot(a.std/Math.sqrt(a.n),b.std/Math.sqrt(b.n));return Math.abs(delta)>Math.max(2*uncertainty,Math.min(a.mean,b.mean)*0.025,0.00003)?Math.sign(delta):0}
+function balSolve3(rows){let m=Array.from({length:3},()=>[0,0,0,0]);for(let [x,y] of rows){if(!Number.isFinite(x)||!Number.isFinite(y))return null;let v=[1,x,x*x];for(let i=0;i<3;i++){for(let j=0;j<3;j++)m[i][j]+=v[i]*v[j];m[i][3]+=v[i]*y}}for(let k=0;k<3;k++){let z=k;for(let i=k+1;i<3;i++)if(Math.abs(m[i][k])>Math.abs(m[z][k]))z=i;if(Math.abs(m[z][k])<1e-15)return null;[m[k],m[z]]=[m[z],m[k]];let div=m[k][k];for(let j=k;j<4;j++)m[k][j]/=div;for(let i=0;i<3;i++)if(i!==k){let f=m[i][k];for(let j=k;j<4;j++)m[i][j]-=f*m[k][j]}}return m.map(r=>r[3])}
+function balFitLocal(stage,bracket){let ps=bracket.map(i=>bal[stage][i]),angleKey=stage==='beta'?'beta':'alpha';if(ps.some(p=>!balFull(p)))return null;let x0=ps[1][angleKey],rows=ps.map(p=>{let x=stage==='beta'?Math.cos(p.beta*Math.PI/180):p.alpha-x0;return [x,balStats(p).mean**2]});let coef=balSolve3(rows);if(!coef)return {valid:false,reason:'Sovitus epäonnistui.'};let [c,b,a]=coef;if(a<=0)return {valid:false,reason:'Kuperaa minimiä ei muodostu. Tarkista mittaukset.'};let xmin=-b/(2*a),value=stage==='beta'?Math.acos(Math.max(-1,Math.min(1,xmin)))*180/Math.PI:xmin+x0;let values=ps.map(p=>p[angleKey]);let lo=Math.min(...values),hi=Math.max(...values);if(!Number.isFinite(value)||value<=lo||value>=hi)return {valid:false,reason:'Mallin minimi jää mittausvälin ulkopuolelle. Tarkista mittaukset.'};let pred=c+b*xmin+a*xmin*xmin;
+ // Kolmella pisteellä ei ole riippumatonta sovitustarkistusta: mittaa ehdotettu asento aina erikseen.
+ return {valid:true,value:balRound(value),predicted:Math.sqrt(Math.max(0,pred)),bracket:ps};}
+function balBracket(stage){let pts=bal[stage],key=stage==='beta'?'beta':'alpha',usable=pts.map((p,i)=>({p,i})).filter(x=>balReady(x.p)).sort((a,b)=>a.p[key]-b.p[key]);if(usable.length<3)return null;let best=usable.reduce((a,b)=>balStats(a.p).mean<=balStats(b.p).mean?a:b);let k=usable.findIndex(x=>x.i===best.i);if(k===0||k===usable.length-1)return null;let left=usable[k-1],right=usable[k+1];if(balCompared(left.p,best.p)<0||balCompared(right.p,best.p)<0)return null;return [left.i,best.i,right.i]}
+function balEnsureFull(stage,indices){let need=indices.map(i=>bal[stage][i]).filter(p=>!balFull(p));return need.length===0}
+function balNextIncomplete(){if(!bal)return null;let pts=bal[bal.phase];for(let i=0;i<pts.length;i++){let p=pts[i];if(!balReady(p))return {i,target:bal.quick};}let b=balBracket(bal.phase);if(b){for(let i of b)if(!balFull(pts[i]))return {i,target:bal.n}}if(bal.phase==='verify'){let i=pts.findIndex(p=>!balFull(p));if(i>=0)return {i,target:bal.n}}return null}
+function balDrive(){if(!bal)return;let stage=bal.phase,pts=bal[stage];if(balCapture)return;let pending=balNextIncomplete();if(pending)return;
+ if(stage==='verify')return;
+ let bracket=balBracket(stage);if(bracket){if(!balEnsureFull(stage,bracket))return;let fit=balFitLocal(stage,bracket);bal.fit[stage]=fit;if(fit?.valid){balSave();return}bal.notice='Sovitus ei kelpaa. Tee tarvittaessa uusintamittaus tai laajenna hakua.';balSave();return}
+ let key=stage==='beta'?'beta':'alpha',ready=pts.filter(balReady);if(!ready.length)return;
+ if(stage==='fine'){
+  // Fine sweep consists of exactly three measurements around the calculated alpha.
+  if(ready.length>=3){bal.notice='Hienosäädön minimi ei rajautunut ±10° alueelle. Voit laajentaa hakua.';}return;
  }
- if(!result.length)result.push('Täytä tunnetut koeasennot. Tulosta ei lasketa keskeneräisestä koesarjasta.');
- result.push('Huom.: koealueen ulkopuolelle jääviä tai huonosti sopivia optimeja ei hyväksytä. Laikan keskeisyys ja asetusten toistettavuus vaikuttavat tulokseen.');
- be('balResult').textContent=result.join('\n');
- if(balCapture)balMsg('Kerätään vain uusia hyväksyttyjä mittauksia: '+pts[balCapture.index].samples.length+'/'+bal.n+'. Älä muuta asentoa keruun aikana.');
- else if(done)balMsg(bal.phase==='alpha'?'α-vaihe valmis. Tarkista sinimuotoinen sovitus ja siirry β-vaiheeseen.':'Molemmat vaiheet valmiit. Varmista suositeltu asento erillisellä mittauksella.');
- else balMsg('Säädä seuraava asento kone pysäytettynä. Käynnistä vasta kiinnityksen tarkistuksen jälkeen ja paina Kerää.');
+ if(stage==='alpha'){
+  const find=x=>pts.find(p=>Math.abs(p.alpha-x)<1e-4),zero=find(0),neg=find(-bal.alphaStep),pos=find(bal.alphaStep);
+  if(!balReady(zero))return;
+  if(!neg){balAdd('alpha',-bal.alphaStep);balSave();return}
+  if(!balReady(neg))return;
+  if(!pos && balCompared(neg,zero)>=0){balAdd('alpha',bal.alphaStep);balSave();return}
+  // If the -15 measurement clearly helps, continue negative without testing +15.
+  if(pos&&!balReady(pos))return;
+  if(pos&&balCompared(neg,zero)>0&&balCompared(pos,zero)>0){return}
+ }
+ // Continue from the best edge point until the minimum is bracketed, or the search limit is reached.
+ let ordered=[...ready].sort((a,b)=>a[key]-b[key]);let best=ordered.reduce((a,b)=>balStats(a).mean<=balStats(b).mean?a:b);
+ let dir=0;
+ if(stage==='alpha'){
+  const neg=pts.find(p=>Math.abs(p.alpha+bal.alphaStep)<1e-4),pos=pts.find(p=>Math.abs(p.alpha-bal.alphaStep)<1e-4),zero=pts.find(p=>Math.abs(p.alpha)<1e-4);
+  if(pos&&balReady(pos)&&neg&&balReady(neg)&&balCompared(pos,zero)>=0&&balCompared(neg,zero)>=0){bal.notice='0° on paras mitattu; tarkennetaan kolmen pisteen mallilla.';return}
+  if(pos&&balReady(pos)&&balCompared(neg,zero)>=0)dir=1;
+  else dir=-1;
+  // If direction was initially negative but optimum is now on positive side, follow best edge.
+  if(best.alpha>0)dir=1;if(best.alpha<0)dir=-1;
+ }else{let idx=ordered.indexOf(best);dir=idx===0?-1:idx===ordered.length-1?1:0;}
+ if(!dir)return;
+ let next=best[key]+dir*(stage==='fine'?10:stage==='alpha'?bal.alphaStep:bal.betaStep);
+ let limit=stage==='alpha'?bal.alphaLimit:stage==='beta'?89:bal.alphaLimit;
+ if(stage==='beta'&&(next<1||next>89)||stage==='alpha'&&Math.abs(next)>limit){bal.notice='Hakua jatkettaisiin asetetun kulmarajan yli. Voit laajentaa rajoja tai palata parhaaseen mitattuun asentoon.';return}
+ if(!pts.some(p=>Math.abs(p[key]-next)<1e-5)){balAdd(stage,next);balSave()}
 }
+function balStart(){try{let fixedBeta=balNum('balBetaFixed',1,85),alphaStep=balNum('balAlphaStep',5,30),alphaLimit=balNum('balAlphaLimit',15,90),betaStep=balNum('balBetaStep',1,20),n=balNum('balN',4,20),quick=balNum('balQuick',2,6);if(quick>=n)throw Error('Alustavia mittauksia täytyy olla vähemmän kuin tarkkoja.');if(alphaStep>alphaLimit)throw Error('α-askel on hakualueen rajaa suurempi.');if(!confirm('Aloitetaanko uusi V1.5-koe? Aiempi V1.5-ohjattu koe korvataan; V1.4-tiedot ja tavallinen mittausloki säilyvät.'))return;
+ bal={version:15,fixedBeta,alphaStep,alphaLimit,betaStep,n,quick,phase:'alpha',alpha:[],beta:[],fine:[],verify:[],fit:{},created:new Date().toISOString(),notice:''};balAdd('alpha',0);balSave();balRender()}catch(e){balMsg(e.message)}}
+function balAdvance(){if(!bal||balCapture)return;balDrive();let stage=bal.phase,fit=bal.fit[stage];if(!fit?.valid){balMsg('Ensin tarvitaan rajattu minimi ja kelvollinen sovitus.');return}
+ if(stage==='alpha'){
+  bal.estimatedAlpha=fit.value;bal.phase='beta';let b=bal.fixedBeta,h=bal.betaStep;for(let v of [b,b-h])if(v>=1&&v<=89)balAdd('beta',v);
+  if(b-h<1){bal.phase='alpha';bal.beta=[];balMsg('β:n alaraja tulisi vastaan. Aloita koe pienemmällä β-askeleella tai suuremmalla lähtö-β:llä.');return}
+ }else if(stage==='beta'){
+  bal.estimatedBeta=fit.value;bal.phase='fine';let a=bal.estimatedAlpha;for(let v of [a,a-10,a+10])balAdd('fine',v);
+ }else if(stage==='fine'){
+  bal.refinedAlpha=fit.value;bal.phase='verify';balAdd('verify',fit.value);
+ }bal.notice='';balSave();balRender()}
+function balExtend(){if(!bal||balCapture)return;let stage=bal.phase;if(stage==='verify')return;let pts=bal[stage],key=stage==='beta'?'beta':'alpha';let ordered=pts.filter(balReady).sort((a,b)=>a[key]-b[key]);if(!ordered.length)return;let best=ordered.reduce((a,b)=>balStats(a).mean<=balStats(b).mean?a:b);
+ let step=stage==='alpha'?bal.alphaStep:stage==='beta'?bal.betaStep:10;
+ let dir=best===ordered[0]?-1:best===ordered.at(-1)?1:0;
+ if(stage==='alpha'&&!dir){let negative=ordered.find(p=>p.alpha<0),positive=ordered.find(p=>p.alpha>0);if(negative&&positive)dir=(balStats(negative).mean<=balStats(positive).mean?-1:1)}
+ if(!dir){balMsg('Minimi on jo mitatun alueen sisällä. Mittaa tarkentavat pisteet tai tarkista sovitus.');return}
+ let next=balRound(best[key]+dir*step),limit=stage==='alpha'?bal.alphaLimit:stage==='fine'?bal.alphaLimit:89;
+ if((stage==='alpha'||stage==='fine')&&Math.abs(next)>limit||stage==='beta'&&(next<1||next>89)){balMsg('Laajennus ylittäisi valitun rajan. Tee tarvittaessa uusi koe laajemmalla α-rajalla.');return}
+ if(balAdd(stage,next)){bal.notice='Lisättiin mittausasento '+fmt(next,2)+'°.';balSave();balRender()}}
+function balBeginCapture(){if(!bal||balCapture||!connected)return;balDrive();let pending=balNextIncomplete();if(!pending)return;let p=bal[bal.phase][pending.i],d=balAngles(p.alpha,p.beta);if(!confirm('Varmista pysäytetyllä koneella laippojen kulmat '+fmt(d.left,2)+'° ja '+fmt(d.right,2)+'°. Käynnistä ja anna kierrosluvun vakiintua. Kerätäänkö uudet mittaukset?'))return;balCapture={phase:bal.phase,index:pending.i,target:pending.target,started:Date.now()};balRender()}
+function balanceOnMeasurement(x){if(!balCapture||!bal||!connected||balCapture.phase!==bal.phase)return;
+ // Vain status 1; heikko 1x-signaali tai epäkelpo taajuus ei ohjaa sovitusta.
+ if(x.status!==1||x.count!==800||x.skips!==0||!Number.isFinite(x.rms)||!Number.isFinite(x.rate)||x.rate<350||x.rate>450||!Number.isFinite(x.frequency)||x.frequency<45||x.frequency>55)return;
+ let p=bal[bal.phase][balCapture.index];if(!p)return;
+ p.samples.push({time:x.time,rms:x.rms,total:x.total,status:x.status,frequency:x.frequency});
+ if(balFull(p)||balStats(p).n>=balCapture.target){balCapture=null;balDrive()}
+ balSave();balRender()}
+function balCSV(){if(!bal){balMsg('Ei ohjattua koetta.');return}let head=['stage','alpha_deg','beta_deg','disk1_deg','disk2_deg','time','rms_g','total_g','status','frequency_hz'];let lines=[head.join(';')];for(let stage of BAL_STAGES)for(let p of bal[stage])for(let r of p.samples){let d=balAngles(p.alpha,p.beta);lines.push([stage,p.alpha,p.beta,d.left,d.right,r.time,r.rms,r.total,r.status,r.frequency].map(csvCell).join(';'))}
+ let blob=new Blob(['\uFEFF'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='hiomakone_ohjattu_v15_'+new Date().toISOString().slice(0,10)+'.csv';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000)}
+function balRender(){if(!bal){be('balInstructions').textContent='';be('balPoints').replaceChildren();be('balCapture').disabled=true;be('balStop').disabled=true;be('balNext').disabled=true;be('balExtend').classList.add('hidden');be('balResult').textContent='Ei ohjattua koetta.';return}
+ balDrive();let stage=bal.phase,pts=bal[stage],pending=balNextIncomplete(),fit=bal.fit[stage];let labels={alpha:'Vaihe 1/4: α:n suuntautuva haku (β vakio). Aloitus 0°, sitten −'+bal.alphaStep+'°. Mittaustulos määrää seuraavan suunnan.',beta:'Vaihe 2/4: β:n mukautuva haku (α vakio). Jatka tarvittaessa pienempään tai suurempaan β-kulmaan.',fine:'Vaihe 3/4: α:n hienosäätö. Kokeet α − 10°, α ja α + 10° ilman pyöristystä (β vakio).',verify:'Vaihe 4/4: lopullisen ehdotuksen erillinen vahvistusmittaus.'};be('balInstructions').textContent=labels[stage];
+ be('balPoints').replaceChildren();pts.forEach((p,i)=>{let st=balStats(p),d=balAngles(p.alpha,p.beta),needed=pending?.i===i?pending.target:(balFull(p)?bal.n:bal.quick),row=document.createElement('div');row.className='entry'+(pending?.i===i?' current':'');let info=document.createElement('div'),strong=document.createElement('strong'),sub=document.createElement('div');strong.textContent=(i+1)+'. α='+fmt(p.alpha,2)+'°, β='+fmt(p.beta,2)+'°';sub.className='muted';sub.textContent='Laipat: '+fmt(d.left,2)+'° ja '+fmt(d.right,2)+'° · '+(st?.n||0)+'/'+needed+' · 1× RMS '+(st?fmt(st.mean,5)+' g ± '+fmt(st.std,5):'—');info.append(strong,sub);row.append(info);if(pending?.i===i){let note=document.createElement('span');note.className='bal-progress';note.textContent=balCapture?'Kerätään':'Seuraava';row.append(note)}be('balPoints').append(row)});
+ be('balCapture').disabled=!!balCapture||!pending||!connected;be('balStop').disabled=!balCapture;be('balCapture').textContent=balCapture?'Kerätään ('+balStats(pts[balCapture.index]).n+'/'+balCapture.target+')':'Kerää tämän asennon mittaukset';be('balNext').disabled=!!balCapture||!fit?.valid||stage==='verify';be('balNext').textContent=stage==='alpha'?'Siirry β-hakuun':stage==='beta'?'Siirry α-hienosäätöön':stage==='fine'?'Siirry vahvistukseen':'Valmis';
+ let extra=be('balExtend');extra.classList.toggle('hidden',stage==='verify'||!!pending||!!fit?.valid);let lines=[];if(fit?.valid)lines.push('Vaiheen '+stage+' laskennallinen optimi: '+fmt(fit.value,2)+'° (RMS²-malli).');if(fit&&!fit.valid)lines.push('Sovituksen ongelma: '+fit.reason);
+ if(stage==='verify'&&balFull(pts[0])){let st=balStats(pts[0]);lines.push('Vahvistus: '+fmt(st.mean,5)+' g ± '+fmt(st.std,5)+' (n='+st.n+').');lines.push('Ehdotettu α='+fmt(bal.refinedAlpha,2)+'°, β='+fmt(bal.estimatedBeta,2)+'°.');let all=BAL_STAGES.flatMap(s=>bal[s]).filter(balFull);let best=all.reduce((a,b)=>!a||balStats(b).mean<balStats(a).mean?b:a,null);if(best){let v=balStats(best);lines.push('Paras mitattu asento: α='+fmt(best.alpha,2)+'°, β='+fmt(best.beta,2)+'° · '+fmt(v.mean,5)+' g.');if(st.mean>v.mean*1.03)lines.push('Huom.: vahvistuksen värinä on yli 3 % parasta mitattua suurempi. Älä hyväksy mallin ennustetta automaattisesti.')} }else if(stage==='fine'&&bal.fit.beta?.valid){lines.push('β-arvio: '+fmt(bal.estimatedBeta,2)+'°.');}
+ if(bal.notice)lines.push(bal.notice);if(!lines.length)lines.push('Mittaus ohjataan seuraavaan tarvittavaan asentoon. Alustavat pisteet 3 mittausta, rajatun minimin pisteet 6 mittausta.');
+ lines.push('Kolmen pisteen sovitus on alustava: ehdotettu lopullinen asento mitataan erikseen.');be('balResult').textContent=lines.join('\n');
+ if(balCapture)balMsg('Kerätään uusia tilakoodin 1 mittauksia. Näytteenotto 350–450 Hz, taajuus 45–55 Hz.');else if(pending)balMsg('Aseta korostettu kulma kone pysäytettynä. Mittaa vasta vakaalla nopeudella.');else if(fit?.valid)balMsg('Minimi on rajattu. Voit siirtyä seuraavaan vaiheeseen.');else if(stage==='verify')balMsg('Vahvistusmittaus valmis.');else balMsg('Haun jatko vaatii lisäpisteen tai uusinnan. Katso tulosruutu.');}
 be('balStart').addEventListener('click',balStart);
-be('balReset').addEventListener('click',()=>{if(!confirm('Poistetaanko ohjatun kokeen tiedot? Tavallinen mittausloki säilyy.'))return;bal=null;balCapture=null;localStorage.removeItem(BS);balRender()});
+be('balReset').addEventListener('click',()=>{if(!confirm('Poistetaanko V1.5-ohjatun kokeen tiedot? Muut mittauslokit säilyvät.'))return;bal=null;balCapture=null;localStorage.removeItem(BS);balRender()});
 be('balCapture').addEventListener('click',balBeginCapture);
 be('balStop').addEventListener('click',()=>{balCapture=null;balRender()});
-be('balNext').addEventListener('click',balStageBeta);
+be('balNext').addEventListener('click',balAdvance);
+be('balExtend').addEventListener('click',balExtend);
 be('balCsv').addEventListener('click',balCSV);
 bal=balLoad();balRender();
 </script></body></html>
